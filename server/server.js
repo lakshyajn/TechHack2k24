@@ -13,14 +13,14 @@ mongoose.connect('mongodb://localhost/hackathon_db', { useNewUrlParser: true, us
 
 // Middleware
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // API routes
 app.use('/api', apiRoutes);
 
 // Serve frontend
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
+    res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 app.listen(PORT, () => {
