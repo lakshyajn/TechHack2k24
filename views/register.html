@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register for TechHack 2024</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">TechHack 2024</div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/challenges">Challenges</a></li>
+                <li><a href="/schedule">Schedule</a></li>
+                <li><a href="/sponsors">Sponsors</a></li>
+                <li><a href="/register" class="cta-button1">Register Now</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="register-hero">
+            <h1>Register for TechHack 2024</h1>
+        </section>
+
+        <section class="register-form">
+            <form id="registration-form">
+                <!-- Form fields as before -->
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="15" max="30" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="team-name">Team Name (optional)</label>
+                    <input type="text" id="team-name" name="team-name">
+                </div>
+
+                <div class="form-group">
+                    <label for="skills">Skills (comma-separated)</label>
+                    <input type="text" id="skills" name="skills" placeholder="e.g., Python, JavaScript, UI/UX">
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Hackathon Experience</label>
+                    <select id="experience" name="experience">
+                        <option value="none">None</option>
+                        <option value="beginner">Beginner (1-2 hackathons)</option>
+                        <option value="intermediate">Intermediate (3-5 hackathons)</option>
+                        <option value="expert">Expert (6+ hackathons)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="dietary">Dietary Restrictions</label>
+                    <input type="text" id="dietary" name="dietary" placeholder="e.g., Vegetarian, Gluten-free">
+                </div>
+
+                <div class="form-group">
+                    <label for="tshirt-size">T-Shirt Size</label>
+                    <select id="tshirt-size" name="tshirt-size">
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="github">GitHub Profile (optional)</label>
+                    <input type="url" id="github" name="github" placeholder="https://github.com/yourusername">
+                </div>
+
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn Profile (optional)</label>
+                    <input type="url" id="linkedin" name="linkedin" placeholder="https://www.linkedin.com/in/yourusername">
+                </div>
+
+                <div class="form-group">
+                    <label for="motivation">What motivates you to join TechHack 2024?</label>
+                    <textarea id="motivation" name="motivation" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <div class="tick">
+                        <label for="code-of-conduct" style="display: inline-block; vertical-align: middle;">
+                            <input type="checkbox" id="code-of-conduct" name="code-of-conduct" required>
+                            I agree to follow the <a href="#" target="_blank">Code of Conduct</a>
+                        </label>
+                    </div>
+                </div>                                          
+                 <div class="register-button">
+                <button type="submit" class="cta-button">Register Now</button>
+                 </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TechHack. All rights reserved.</p>
+        <div class="social-links">
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/animations.js"></script>
+    <script>
+        document.getElementById('registration-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); 
+    
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                age: document.getElementById('age').value,
+                teamName: document.getElementById('team-name').value || undefined,
+                skills: document.getElementById('skills').value || undefined,
+                experience: document.getElementById('experience').value,
+                dietary: document.getElementById('dietary').value || undefined,
+                tshirtSize: document.getElementById('tshirt-size').value,
+                github: document.getElementById('github').value || undefined,
+                linkedin: document.getElementById('linkedin').value || undefined,
+                motivation: document.getElementById('motivation').value,
+                codeOfConduct: document.getElementById('code-of-conduct').checked
+            };
+    
+            // Remove undefined fields
+            for (const key in formData) {
+                if (formData[key] === undefined) {
+                    delete formData[key];
+                }
+            }
+    
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+    
+                const contentType = response.headers.get('Content-Type');
+                if (contentType && contentType.includes('application/json')) {
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert(result.message); 
+                        window.location.href = '/dashboard';
+                    } else {
+                        alert(result.message); 
+                    }
+                } else {
+                    const text = await response.text();
+                    alert('Unexpected response: ' + text);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred: ' + error.message);
+            }
+        });
+    </script>    
+</body>
+</html>

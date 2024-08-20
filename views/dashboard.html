@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --text-color: #ecf0f1;
+            --bg-color: #1a1a1a;
+            --card-bg-color: #2c3e50;
+            --header-height: 70px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            height: var(--header-height);
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: relative;
+            color: var(--text-color);
+        }
+
+        .header h1 {
+            flex: 1;
+            margin: 0;
+        }
+
+        .header .menu-icon {
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .header .logout-button {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent-color);
+            border: none;
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .dashboard-content {
+            padding: 20px;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: var(--card-bg-color);
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: var(--header-height);
+        }
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 3rem;
+            margin-left: 50px;
+        }
+
+        .sidenav .user-details {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="toast" class="toast"></div>
+    <div class="header">
+        <span class="menu-icon" onclick="openNav()">&#9776;</span>
+        <h1>Dashboard</h1>
+        <button class="logout-button" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="sidenav" id="mySidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div class="user-details">
+            <h2>User Details</h2>
+            <p><strong>Name:</strong> <span id="userName"></span></p>
+            <p><strong>Email:</strong> <span id="userEmail"></span></p>
+            <p><strong>Age:</strong> <span id="userAge"></span></p>
+            <p><strong>Team Name:</strong> <span id="userTeamName"></span></p>
+            <p><strong>Skills:</strong> <span id="userSkills"></span></p>
+            <p><strong>Experience:</strong> <span id="userExperience"></span></p>
+            <p><strong>Dietary Restrictions:</strong> <span id="userDietaryRestrictions"></span></p>
+            <p><strong>T-Shirt Size:</strong> <span id="userTshirtSize"></span></p>
+            <p><strong>GitHub:</strong> <a id="userGithub" href="#" target="_blank">Profile</a></p>
+            <p><strong>LinkedIn:</strong> <a id="userLinkedin" href="#" target="_blank">Profile</a></p>
+            <p><strong>Motivation:</strong> <span id="userMotivation"></span></p>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <h2>Welcome to your Dashboard</h2>
+        <p>Here you can view and manage your registration details.</p>
+    </div>
+   
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+        function logout() {
+            // Perform logout by calling the server-side logout route
+            fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle successful logout
+                if (data.success) {
+                    window.location.href = '/';
+                } else {
+                    alert('Logout failed: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during logout: ' + error.message);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('userId');
+
+            fetch(`/api/register/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('userName').textContent = data.name;
+                    document.getElementById('userEmail').textContent = data.email;
+                    document.getElementById('userAge').textContent = data.age;
+                    document.getElementById('userTeamName').textContent = data.teamName;
+                    document.getElementById('userSkills').textContent = data.skills;
+                    document.getElementById('userExperience').textContent = data.experience;
+                    document.getElementById('userDietaryRestrictions').textContent = data.dietaryRestrictions;
+                    document.getElementById('userTshirtSize').textContent = data.tshirtSize;
+                    document.getElementById('userGithub').href = data.githubProfile;
+                    document.getElementById('userLinkedin').href = data.linkedinProfile;
+                    document.getElementById('userMotivation').textContent = data.motivation;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>

@@ -1,28 +1,62 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import path from 'path';
-import apiRoutes from '../server/routes/api';
+import mongoose from 'mongoose';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+import User from './models/user.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+dotenv.config();
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost/hackathon_db', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Could not connect to MongoDB', err));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Middleware
-app.use(express.json());
+const MongoDBurl = process.env.MongoDBurl;
+
+mongoose.connect(MongoDBurl, {})
+    .then(() => console.log('MongoDB connected...'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
+// Serve static files from the public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
-// API routes
-app.use('/api', apiRoutes);
+app.use(express.json());
 
-// Serve frontend
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+// Routes for serving HTML files
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/index.html'));
 });
 
+app.get('/about', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/about.html'));
+});
+
+app.get('/challenges', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/challenges.html'));
+});
+
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/register.html'));
+});
+
+app.get('/schedule', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/schedule.html'));
+});
+
+app.get('/sponsors', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/sponsors.html'));
+});
+
+app.get('/dashboard', async (req, res) => {
+    const userId = req.query.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    res.sendFile(path.join(__dirname, '../views/dashboard.html'));
+});
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
