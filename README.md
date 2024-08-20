@@ -20,7 +20,10 @@ Register Page
 ![Screenshot 2024-08-21 011444](https://github.com/user-attachments/assets/145ac007-3f06-41a3-8cfb-9c558c02c6c0)
 
 
+Demo Video
+https://github.com/user-attachments/assets/edacdaf6-6718-41bb-b7de-e0f3764aea22
 
+(Due to size limit restrictions, this much video is made🥲)
 
 ## Features Implemented
 ### Frontend Features
