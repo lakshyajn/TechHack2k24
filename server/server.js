@@ -24,7 +24,7 @@ app.use(express.json());
 
 // Routes for serving HTML files
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/index.html'));
+    res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 app.get('/about', (req, res) => {
