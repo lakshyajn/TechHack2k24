@@ -15,6 +15,13 @@ Schedule Page
 
 ![Screenshot 2024-08-21 011418](https://github.com/user-attachments/assets/ff4f353c-3ecb-4c36-8b76-5738917cbef8)
 
+Dashboard Page
+
+![Screenshot 2024-08-21 014331](https://github.com/user-attachments/assets/5225a0aa-7e43-4ec0-9dac-dbfceaeb1d41)
+
+Dashboard page with Sidenav
+![Screenshot 2024-08-21 014349](https://github.com/user-attachments/assets/8b07edf6-22ef-4b87-91ef-e41411131e06)
+
 Register Page
 
 ![Screenshot 2024-08-21 011444](https://github.com/user-attachments/assets/145ac007-3f06-41a3-8cfb-9c558c02c6c0)
@@ -24,6 +31,7 @@ Demo Video
 https://github.com/user-attachments/assets/edacdaf6-6718-41bb-b7de-e0f3764aea22
 
 (Due to size limit restrictions, this much video is made🥲)
+
 
 ## Features Implemented
 ### Frontend Features
